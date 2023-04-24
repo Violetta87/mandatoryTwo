@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "description": "backend of mandatory 2",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "create-database": "node ./database/createDatabase.js",
+    "reset-database": "node ./database/createDatabase.js delete_mode"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Violetta87/mandatoryTwo.git"
+  },
+  "author": "cam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Violetta87/mandatoryTwo/issues"
+  },
+  "homepage": "https://github.com/Violetta87/mandatoryTwo#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "mongodb": "^5.3.0",
+    "mongoose": "^7.0.4"
+  }
+}
