@@ -1,27 +1,37 @@
 import Router from "express";
 const router = Router();
 
-import bcrypt from "bcrypt";
+import { compare } from "bcrypt";
+import { findByEmail } from "../database/crud.js";
 
-
-router.post("login-page", async (req,res) => {
-    const loginEmail = req.body.loginEmain;
-    const loginPassword = req.body.loginPassword;
-    const passwordPlaintext = "test"
-    const namePlainText = "test"
-    const encryptedPassword = await bcrypt.hash(passwordPlaintext, 12);
-    const isTheSame = await bcrypt.compare(encryptedPassword, loginPassword)
-    if(isTheSame && loginEmail === namePlainText){
-        req.session.user = result;
+router.post("/login", async (req,res) => {
+    try{
+        const loginInfo = req.body;
+    
+    if(!loginInfo.email || !loginInfo.password){
+        throw new Error('missing email or password')
     }
-
-    const message = {
-        succes: authorized,
-        location: authorized ? "/api" : "login" //we use a if statement
+    
+    
+    const loginFromDatabase = await findByEmail(loginInfo.mail)
+    
+    if(!loginFromDatabase){
+        throw new Error("user doesnt exists")
     }
+    
+    //compare decrypter : takes two params a string that needs to encryptet
+    // and hashed string that needs to be decrypted and then compares them to eachother.  
+    const isUserValid = await compare(loginInfo.password, loginFromDatabase.password)
+    
+    if(isUserValid){
+        res.status(200).send({user: loginFromDatabase.email})
+    }
+    
+    
+    }catch(error){
+        res.status(400).send({error})
+    }
+})
 
-    res.send(message);  
-
-});
 
 export default router;

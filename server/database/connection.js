@@ -1,12 +1,9 @@
-import mongoose from "mongoose";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("connected"))
-.catch((error) => console.log(error));
+const db = await open({
+    filename: "login.db",
+    driver: sqlite3.Database
+});
 
-//mongoose; 
-
-
+export default db;

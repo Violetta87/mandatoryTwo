@@ -1,23 +1,18 @@
 import express from "express"
-import mongoose from "mongoose";
 
 const app = express();
 app.use(express.json());
 
+import cors from "cors";
+app.use(cors({
+    credentials: true,
+    origin: "http://localhost:8080/sign-in"
+}));
 
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+import loginRouter from "./routers/loginRouter.js"
+app.use(loginRouter);
 
-    
-})
-.then(() => console.log("connected"))
-.catch((error) => console.log(error));
 
-app.get("/home", (req,res) => {
-    res.send({data: "hej"})
-})
-
-const PORT = 8080;
+const PORT = 3000;
 
 app.listen(PORT, (error) => console.log(error))

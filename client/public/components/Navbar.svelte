@@ -1,7 +1,7 @@
 <script>
   import { Router, Link, Route } from  "svelte-navigator";
-  //import SignIn from "./pages/SignIn.svelte"
-  import Home from "./pages/Home.svelte"
+  import SignIn from "../pages/SignIn.svelte"
+  import Home from "../pages/Home.svelte"
 </script>
 
 <Router>
@@ -17,6 +17,10 @@
 <Route path="/">
   <Home />
 </Route>
+<Route path="/sign-in">
+  <SignIn/>
+</Route>
+
 </Router>
 
 <style>
