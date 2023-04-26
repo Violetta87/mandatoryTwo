@@ -1,31 +1,36 @@
 <script>
-    import { URL_LOCAL } from "../store/url.js"
+    import { BASE_URL } from "../store/url.js"
+    import toastr from "toastr"
+    import { useNavigate, useLocation, useResolvable, navigate } from "svelte-navigator"
 
     let email;
     let password;
+
    async function validateLogin(){
-    const url = 'http://localhost:3000/login'
-    //const url = `${URL_LOCAL}/login`;
-
-    console.log(typeof url, "url")
-
-    console.log(url)
-
     const options={};
 
     options.method= "POST"
     options.headers = { 'Content-Type': 'application/json'}
     options.body = JSON.stringify({email: email, password: password});
-
     options.credentials= "include"
 
-    console.log(email, "email")
-    console.log(password, "password")
+    console.log(email, password)
 
-    const response = await fetch(url, options);
+    const response = await fetch($BASE_URL + "/login", options);
 
     console.log(response)
-    
+    console.log("hej")
+    const data = await response.json();
+    if(response.status===200){
+        const authenticatedUser = data.email;
+        user.set(authenticatedUser);
+        toastr.success(`hiiii ${authenticatedUser}`);
+        setTimeout(()=> {
+            navigate("/home", { replace: true})
+        }, 1000);   
+    }else{
+        toastr.error(data.message)
+    }
 
    } 
 </script>

@@ -1,45 +1,43 @@
 import Router from "express";
 const router = Router();
 import db from "../database/connection.js"
+
 import dotenv from "dotenv"
 dotenv.config();
 
-import { compare } from "bcrypt";
-
+import session from "express-session";
+router.use(session({
+    secret: process.env.SESSION_KEY,
+    resave: false, //determinates if the session should be saved on every request. true if modified, false if not modified. 
+    saveUninitialized:true //(true) session created even if not modified for anomonous user , (false) only created if modified. 
+}));
 
 router.post("/login", async (req,res) => {
     try{
         const loginInfo = req.body;
 
-        const email = req.body.email
-
+        if(!loginInfo.email || !loginInfo.password){
+            res.status(400).send({
+                message: 'Information missing',
+                status: 400
+            })
+        }
     
-    if(!loginInfo.email || !loginInfo.password){
-        throw new Error('missing email or password')
-    }
+        const loginFromDatabase = await db.get(`SELECT * FROM login WHERE email = ?`, [loginInfo.email])
     
-    const loginFromDatabase = await db.get(`SELECT * FROM login WHERE email = ?`, [loginInfo.email])
-    
-    if(!loginFromDatabase){
-        throw new Error("user doesnt exists")
-    }
-    
-    let isUserValid = false;
-
-    if (loginInfo.password === loginFromDatabase.password){
-
-        isUserValid = true
-
-    }
-    
+        if(!loginFromDatabase){
+            res.status(400).send({
+                message: 'Couldnt find user'  
+            })
+        } 
     
     //compare decrypter : takes two params a string that needs to encryptet
     // and hashed string that needs to be decrypted and then compares them to eachother.  
     //const isUserValid = await compare(loginInfo.password, loginFromDatabase.password)
 
-    if(isUserValid){
-        res.status(200).send({user: loginFromDatabase.email})
-    }
+        if(loginInfo.password === loginFromDatabase.password){
+            res.status(200).send({user: loginFromDatabase.email})
+        }
     
     
     }catch(error){
