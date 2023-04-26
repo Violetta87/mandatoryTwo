@@ -1,19 +1,32 @@
 <script>
-    let email="cam";
-    let password="test";
+    import { URL_LOCAL } from "../store/url.js"
+
+    let email;
+    let password;
    async function validateLogin(){
-    const url = "http://localhost:3000/login"
+    const url = 'http://localhost:3000/login'
+    //const url = `${URL_LOCAL}/login`;
+
+    console.log(typeof url, "url")
+
+    console.log(url)
 
     const options={};
 
     options.method= "POST"
-    options.headers = { 'content-Type': 'application/json'
-    ,"Accept": "application/json", "Access-Control-Allow-Origin": "*"}
-    options.body= JSON.stringify(email, password)
-    options.mode= "cors"
+    options.headers = { 'Content-Type': 'application/json'}
+    options.body = JSON.stringify({email: email, password: password});
+
     options.credentials= "include"
 
+    console.log(email, "email")
+    console.log(password, "password")
+
     const response = await fetch(url, options);
+
+    console.log(response)
+    
+
    } 
 </script>
 
