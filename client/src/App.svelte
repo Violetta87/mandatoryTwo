@@ -7,9 +7,10 @@ import Home from "./pages/Home.svelte"
 
 <SignIn />
 
-<Router>
-	<Route path="/" component={SignIn} />
-	<PrivateRoute path="/home" component={Home} />
+<Router path="/" let:location component={SignIn}>
+	<PrivateRoute path="/home">
+		<Home/>
+	</PrivateRoute>
 </Router>
 
 
