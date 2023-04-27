@@ -1,7 +1,5 @@
 <script>
   import { Router, Link, Route } from  "svelte-navigator";
-  import SignIn from "../pages/SignIn.svelte"
-  import Home from "../pages/Home.svelte"
 </script>
 
 <Router>
@@ -10,15 +8,11 @@
         <h1>Mandatory 2</h1>
     </div>
     <ul>
-      <li><Link to="/" class="link">Home</Link></li>
-      <li><Link to="/sign-in" class="link">Login</Link></li>
+      <li><Link to="/log-out" class="link">Logout</Link></li>
     </ul>
 </nav>
-<Route path="/">
-  <Home />
-</Route>
-<Route path="/sign-in">
-  <SignIn/>
+
+<Route path="/log-out">
 </Route>
 
 </Router>
@@ -61,7 +55,4 @@
     }
 
   </style>
-  
-
-
   

@@ -40,7 +40,7 @@ router.post("/login", async (req,res) => {
     console.log(isUserValid)
 
         if(isUserValid){
-            console.log(loginFromDatabase.password, loginInfo.password)
+            req.session.user = loginFromDatabase.email
            return res.status(200).send({
             user: loginFromDatabase.email,
             message: "user found",
@@ -53,10 +53,9 @@ router.post("/login", async (req,res) => {
 })
 
 router.get("/logout", (req,res) => {
-    /*req.session.destroy(() =>{
+    req.session.destroy(() =>{
         res.send({message: "logged out"})
     })
-    */
 })
 
 

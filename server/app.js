@@ -15,7 +15,22 @@ app.use(cors({
 }));
 
 import loginRouter from "./routers/loginRouter.js"
+
 app.use(loginRouter);
+
+//isautorized
+
+const isAuthorized = (req,res,next) => {
+    if(req.session.user){
+        next();
+    }else{
+        res.status(400).send("Not logged in")
+    }
+}
+
+app.use("/home", isAuthorized);
+
+
 
 const PORT = 8081;
 

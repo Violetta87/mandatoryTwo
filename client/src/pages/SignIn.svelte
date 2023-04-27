@@ -1,7 +1,8 @@
 <script>
-    import { BASE_URL } from "../store/url.js"
+    import { BASE_URL } from "../store/url.js"; 
     import toastr from "toastr"
     import { navigate } from "svelte-navigator"
+    import { user } from "../store/user.js";
 
     let email;
     let password;
@@ -28,16 +29,19 @@
     if(data.status===200){
         const authenticatedEmail = data.user;
         localStorage.setItem("user", JSON.stringify(data.user))
-        console.log(data.user)
+        user.setItem(data.user);
         toastr.success(`hiiii ${authenticatedEmail}`);
+
         setTimeout(()=> {
-            navigate("/home", { replace: true})
+            const from = ($location.state && $location.state.from) || "/";
+		    navigate(from, { replace: true });
         }, 1000);   
     }else{
         toastr.error(data.message)
     }
+}
 
-   } 
+
 </script>
 
 <h2>Login page</h2>
@@ -50,4 +54,4 @@
 <input type="password" name="password" bind:value={password} required>
 
 <button type="submit">Login</button>
-</form>
+</form> 
