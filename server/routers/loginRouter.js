@@ -1,6 +1,7 @@
 import Router from "express";
 const router = Router();
 import db from "../database/connection.js"
+import { compare } from "bcrypt"
 
 import dotenv from "dotenv"
 dotenv.config();
@@ -17,7 +18,7 @@ router.post("/login", async (req,res) => {
         const loginInfo = req.body;
 
         if(!loginInfo.email || !loginInfo.password){
-            res.status(400).send({
+            return res.status(400).send({
                 message: 'Information missing',
                 status: 400
             })
@@ -25,23 +26,29 @@ router.post("/login", async (req,res) => {
     
         const loginFromDatabase = await db.get(`SELECT * FROM login WHERE email = ?`, [loginInfo.email])
     
+        console.log("efter loginfromdatabase", loginFromDatabase)
+
         if(!loginFromDatabase){
-            res.status(400).send({
+           return res.status(400).send({
                 message: 'Couldnt find user'  
             })
         } 
     
     //compare decrypter : takes two params a string that needs to encryptet
     // and hashed string that needs to be decrypted and then compares them to eachother.  
-    //const isUserValid = await compare(loginInfo.password, loginFromDatabase.password)
+    const isUserValid = await compare(loginInfo.password, loginFromDatabase.password)
+    console.log(isUserValid)
 
-        if(loginInfo.password === loginFromDatabase.password){
-            res.status(200).send({user: loginFromDatabase.email})
-        }
-    
-    
+        if(isUserValid){
+            console.log(loginFromDatabase.password, loginInfo.password)
+           return res.status(200).send({
+            user: loginFromDatabase.email,
+            message: "user found",
+            status:200
+        })
+    }
     }catch(error){
-        res.status(400).send({error})
+        return res.status(400).send({error})
     }
 })
 

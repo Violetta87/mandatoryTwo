@@ -1,7 +1,7 @@
 <script>
     import { BASE_URL } from "../store/url.js"
     import toastr from "toastr"
-    import { useNavigate, useLocation, useResolvable, navigate } from "svelte-navigator"
+    import { navigate } from "svelte-navigator"
 
     let email;
     let password;
@@ -17,14 +17,19 @@
     console.log(email, password)
 
     const response = await fetch($BASE_URL + "/login", options);
-
     console.log(response)
-    console.log("hej")
+   
+    //parser det til javascript object
     const data = await response.json();
-    if(response.status===200){
-        const authenticatedUser = data.email;
-        user.set(authenticatedUser);
-        toastr.success(`hiiii ${authenticatedUser}`);
+
+    console.log(data)
+
+    
+    if(data.status===200){
+        const authenticatedEmail = data.user;
+        localStorage.setItem("user", JSON.stringify(data.user))
+        console.log(data.user)
+        toastr.success(`hiiii ${authenticatedEmail}`);
         setTimeout(()=> {
             navigate("/home", { replace: true})
         }, 1000);   

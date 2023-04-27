@@ -17,7 +17,11 @@ app.use(cors({
 import loginRouter from "./routers/loginRouter.js"
 app.use(loginRouter);
 
+const PORT = 8081;
 
-const PORT = 3000;
-
-app.listen(PORT, (error) => console.log(error))
+app.listen(PORT, (error) => {
+    if(error){
+        console.log(error)
+    }
+    console.log("server is listening on PORT:", PORT)
+});
