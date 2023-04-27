@@ -5,10 +5,9 @@ import PrivateRoute from "./privateRoutes/PrivateRoute.svelte"
 import Home from "./pages/Home.svelte"
 </script>
 
-<SignIn />
-
-<Router path="/" let:location component={SignIn}>
-	<PrivateRoute path="/home">
+<Router>
+	<Route path="/" component={SignIn}/>
+	<PrivateRoute path="/home" let:location>
 		<Home/>
 	</PrivateRoute>
 </Router>
