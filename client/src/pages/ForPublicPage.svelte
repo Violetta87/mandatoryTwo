@@ -1,0 +1,1 @@
+<h2>Everybody can acces this page without being logged in.</h2>
